@@ -2,6 +2,7 @@
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -11,13 +12,15 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Button } from "./ui/button";
 
 const formSchema = z.object({
     nome: z.string().nonempty("O nome completo é obrigatório"),
     sobrenome: z.string().nonempty("O sobrenome é obrigatório"),
     email: z.string().nonempty("O email completo é obrigatório"),
     cpf: z.string().nonempty("O CPF é obrigatório"),
-    numeroTelefone: z.string()
+    numeroTelefone: z.string().nonempty("O numero é obrigatório"),
+    link: z.string().nonempty("Link necessario para colocar a foto de perfil")
 });
 
 export default function CreateForm() {
@@ -29,6 +32,7 @@ export default function CreateForm() {
             email: "",
             cpf: "",
             numeroTelefone: "",
+            link: ""
         }
     });
 
@@ -52,7 +56,8 @@ export default function CreateForm() {
                                     <FormLabel>Nome: </FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Insira seu nome..." {...field}
+                                            {...field}
+                                            placeholder="Insira seu nome..."
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
@@ -68,7 +73,8 @@ export default function CreateForm() {
                                     <FormLabel>Sobrenome: </FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Insira seu sobrenome..." {...field}
+                                            {...field}
+                                            placeholder="Insira seu sobrenome..."
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
@@ -86,8 +92,9 @@ export default function CreateForm() {
                                     <FormLabel>Número de telefone: </FormLabel>
                                     <FormControl>
                                         <Input
+                                            {...field}
                                             type="number"
-                                            placeholder="(XX) XXXXX-XXXX" {...field}
+                                            placeholder="(XX) XXXXX-XXXX"
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
@@ -103,7 +110,8 @@ export default function CreateForm() {
                                     <FormLabel>Insira o CPF: </FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="CPF..." {...field}
+                                            {...field}
+                                            placeholder="CPF..."
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
@@ -111,6 +119,53 @@ export default function CreateForm() {
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className="flex gap-4 items-center justify-center">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Insira o email: </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="Insira o email..."
+                                            className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className="flex gap-4 items-center justify-center">
+                        <FormField
+                            control={form.control}
+                            name="link"
+                            render={({ field }) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Insira o link do seu GitHub: </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="Insira o link..."
+                                            className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
+                                        />
+                                    </FormControl>
+                                    <FormDescription>Link necessario para obter sua foto de perfil</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className="w-full">
+                        <Button
+                            variant={"secondary"}
+                            className="w-full"
+                        >
+                            Salvar contato
+                        </Button>
                     </div>
                 </form>
             </Form>
