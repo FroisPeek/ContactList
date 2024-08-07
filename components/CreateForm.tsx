@@ -5,21 +5,26 @@ import {
     FormDescription,
     FormField,
     FormItem,
-    FormLabel,
-    FormMessage
+    FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import InputMask from 'react-input-mask';
 import { z } from "zod";
 import { Button } from "./ui/button";
 
 const formSchema = z.object({
     nome: z.string().nonempty("O nome completo é obrigatório"),
     sobrenome: z.string().nonempty("O sobrenome é obrigatório"),
-    email: z.string().nonempty("O email completo é obrigatório"),
-    cpf: z.string().nonempty("O CPF é obrigatório"),
-    numeroTelefone: z.string().nonempty("O numero é obrigatório"),
+    email: z.string().nonempty("O email completo é obrigatório").email(),
+    cpf: z.string()
+        .nonempty("O CPF é obrigatório")
+        .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
+        .max(14, "O CPF deve ter no máximo 14 caracteres"),
+    numeroTelefone: z.string()
+        .nonempty("O número é obrigatório")
+        .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Tente novamente").max(15), // Ajuste o max conforme necessário
     link: z.string().nonempty("Link necessario para colocar a foto de perfil")
 });
 
@@ -41,7 +46,7 @@ export default function CreateForm() {
     }
 
     return (
-        <div className="bg-zinc-800 p-4 rounded w-full">
+        <div className="bg-zinc-800 p-4 rounded w-full mt-8">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <h2 className="font-bold text-3xl">
@@ -61,7 +66,6 @@ export default function CreateForm() {
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -78,44 +82,60 @@ export default function CreateForm() {
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
                     <div className="flex gap-4 items-center justify-center">
-                        <FormField
+                        <Controller
                             control={form.control}
                             name="numeroTelefone"
                             render={({ field }) => (
                                 <FormItem className="w-full">
                                     <FormLabel>Número de telefone: </FormLabel>
                                     <FormControl>
-                                        <Input
+                                        <InputMask
+                                            mask="(99) 99999-9999"
+                                            maskChar={null}
                                             {...field}
-                                            type="number"
-                                            placeholder="(XX) XXXXX-XXXX"
-                                            className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
-                                        />
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        >
+                                            {(inputProps) => (
+                                                <Input
+                                                    {...inputProps}
+                                                    placeholder="(XX) XXXXX-XXXX"
+                                                    className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
+                                                />
+                                            )}
+                                        </InputMask>
                                     </FormControl>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                        <Controller
                             control={form.control}
                             name="cpf"
                             render={({ field }) => (
                                 <FormItem className="w-full">
                                     <FormLabel>Insira o CPF: </FormLabel>
                                     <FormControl>
-                                        <Input
+                                        <InputMask
+                                            mask="999.999.999-99"
+                                            maskChar={null}
                                             {...field}
-                                            placeholder="CPF..."
-                                            className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
-                                        />
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        >
+                                            {(inputProps) => (
+                                                <Input
+                                                    {...inputProps}
+                                                    placeholder="CPF..."
+                                                    className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
+                                                />
+                                            )}
+                                        </InputMask>
                                     </FormControl>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -134,7 +154,6 @@ export default function CreateForm() {
                                             className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                         />
                                     </FormControl>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -154,7 +173,6 @@ export default function CreateForm() {
                                         />
                                     </FormControl>
                                     <FormDescription>Link necessario para obter sua foto de perfil</FormDescription>
-                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
