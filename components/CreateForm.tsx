@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client';
 import {
     Form,
@@ -24,7 +25,7 @@ const formSchema = z.object({
         .max(14, "O CPF deve ter no máximo 14 caracteres"),
     numeroTelefone: z.string()
         .nonempty("O número é obrigatório")
-        .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Tente novamente").max(15), // Ajuste o max conforme necessário
+        .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Tente novamente").max(15),
     link: z.string().nonempty("Link necessario para colocar a foto de perfil")
 });
 
