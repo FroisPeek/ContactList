@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 'use client';
 import {
     Form,
@@ -9,7 +9,9 @@ import {
     FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useMutateCreateContato from "@/hooks/useMutateCreateContatos";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import InputMask from 'react-input-mask';
 import { z } from "zod";
@@ -23,7 +25,7 @@ const formSchema = z.object({
         .nonempty("O CPF é obrigatório")
         .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
         .max(14, "O CPF deve ter no máximo 14 caracteres"),
-    numeroTelefone: z.string()
+    numero: z.string()
         .nonempty("O número é obrigatório")
         .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Tente novamente").max(15),
     link: z.string().nonempty("Link necessario para colocar a foto de perfil")
@@ -37,14 +39,33 @@ export default function CreateForm() {
             sobrenome: "",
             email: "",
             cpf: "",
-            numeroTelefone: "",
+            numero: "",
             link: ""
         }
     });
 
+    const { mutateAsync: createContato, isLoading, isPending, isSuccess } = useMutateCreateContato()
+
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+        const newContato = {
+            nome: values.nome,
+            sobrenome: values.sobrenome,
+            email: values.email,
+            cpf: values.cpf,
+            numero: values.numero,
+            link: values.link
+        }
+        createContato(newContato)
+        if (isSuccess) {
+            form.reset()
+        }
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            window.location.reload();
+        }
+    }, [isSuccess]);
 
     return (
         <div className="bg-zinc-800 p-4 rounded w-full mt-8">
@@ -90,7 +111,7 @@ export default function CreateForm() {
                     <div className="flex gap-4 items-center justify-center">
                         <Controller
                             control={form.control}
-                            name="numeroTelefone"
+                            name="numero"
                             render={({ field }) => (
                                 <FormItem className="w-full">
                                     <FormLabel>Número de telefone: </FormLabel>

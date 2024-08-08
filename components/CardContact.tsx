@@ -6,19 +6,17 @@ interface iProps {
         nome: string;
         sobrenome: string;
         numero: string;
-        foto: string;
+        link: string;
         email: string;
     }
 }
 
 export default function CardContact({ contatos }: iProps) {
-    console.log(contatos.foto);
-
     return (
         <div>
-            <Card className="w-full h-16 text-white bg-zinc-800 flex items-center pl-2 pr-2 gap-4">
+            <Card className="w-full h-16 text-white bg-zinc-800 flex items-center pl-2 pr-2 gap-4 mb-2">
                 <Avatar>
-                    <AvatarImage src={contatos.foto} alt={`${contatos.nome} ${contatos.sobrenome}`} />
+                    <AvatarImage src={`${contatos.link}.png`} alt={`${contatos.nome} ${contatos.sobrenome}`} />
                     <AvatarFallback>FT</AvatarFallback>
                 </Avatar>
                 <div className="text-xs gap-2 w-full">

@@ -7,7 +7,6 @@ import { Skeleton } from "./ui/skeleton";
 
 export default function SearchNavBar() {
     const { data: contatos, error, isLoading } = useQueryGetAllContatos();
-    console.log(contatos);
 
     return (
         <div className="bg-zinc-900 w-96 h-full rounded p-4">
