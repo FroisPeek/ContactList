@@ -6,9 +6,11 @@ import {
 } from "@/components/ui/tabs"
 import { useState } from "react"
 import CreateForm from "./CreateForm"
+import EditForm from "./EditForm"
 import PrincipalPage from "./PrincipalPage"
 
 export default function Page() {
+    //@ts-nocheck
     const [tab, setTab] = useState<"Principal" | "Adicionar" | "Editar">("Principal")
 
     return (
@@ -27,9 +29,7 @@ export default function Page() {
                     <CreateForm />
                 </TabsContent>
                 <TabsContent value="Editar">
-                    <div className="bg-red-600">
-                        teste2
-                    </div>
+                    <EditForm />
                 </TabsContent>
             </Tabs>
         </div>

@@ -21,7 +21,12 @@ export default function CardContact({ contatos }: iProps) {
                 </Avatar>
                 <div className="text-xs gap-2 w-full">
                     <h3>{contatos.nome} {contatos.sobrenome}</h3>
-                    <h3>{contatos.numero}</h3>
+                    <a
+                        className="text-sky-300 underline hover:text-blue-100 cursor-pointer"
+                        href={contatos.link}
+                        onClick={() => console.log(contatos.link)}
+                    >{contatos.link}
+                    </a>
                 </div>
             </Card>
         </div>

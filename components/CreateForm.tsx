@@ -17,7 +17,7 @@ import InputMask from 'react-input-mask';
 import { z } from "zod";
 import { Button } from "./ui/button";
 
-const formSchema = z.object({
+export const formSchema = z.object({
     nome: z.string().nonempty("O nome completo é obrigatório"),
     sobrenome: z.string().nonempty("O sobrenome é obrigatório"),
     email: z.string().nonempty("O email completo é obrigatório").email(),
@@ -152,7 +152,7 @@ export default function CreateForm() {
                                             {(inputProps) => (
                                                 <Input
                                                     {...inputProps}
-                                                    placeholder="CPF..."
+                                                    placeholder="CPF (Pelo amor de Deus coloca cpf fake)..."
                                                     className="w-full rounded h-9 px-2 border border-gray-200 shadow-sm"
                                                 />
                                             )}
