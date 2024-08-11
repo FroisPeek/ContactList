@@ -22,10 +22,12 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import useMutateEditContato from "@/hooks/useMutateEditContato";
 import useQueryGetAllContatos from "@/hooks/useQueryGetAllContatos";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -33,12 +35,14 @@ import InputMask from 'react-input-mask';
 import { z } from "zod";
 import { formSchema } from "./CreateForm";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
 export default function EditForm() {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState<string>('')
+
     const { data: contatos, isLoading } = useQueryGetAllContatos()
+    const { mutateAsync, isSuccess } = useMutateEditContato()
+    const query = useQueryClient();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -62,12 +66,38 @@ export default function EditForm() {
             form.setValue("email", selectedContato.email);
             form.setValue("link", selectedContato.link);
         }
-    }, [value, contatos, form]);
+    }, [value]);
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(contatos.codigo)
-        console.log('Form Values:', values);
+    async function onEdit(values: z.infer<typeof formSchema>) {
+        const selectedContato = contatos?.find((contato: any) => contato.nome === value);
+        if (!selectedContato) {
+            toast.error('Erro', {
+                description: "Contato não encontrado",
+                closeButton: true,
+                duration: 5000
+            });
+            return;
+        }
+
+        await mutateAsync({
+            contatoId: selectedContato.codigo,
+            values: {
+                nome: values.nome,
+                sobrenome: values.sobrenome,
+                numero: values.numero,
+                cpf: values.cpf,
+                email: values.email,
+                link: values.link
+            }
+        });
+
+        form.reset()
+        query.invalidateQueries({
+            queryKey: ["getContatos"],
+            exact: true
+        })
     }
+
 
     return (
         <div className="bg-zinc-800 p-4 rounded w-full mt-8">
@@ -75,7 +105,7 @@ export default function EditForm() {
                 Edite um contato da lista:
             </h2>
             <div className="w-full flex flex-col gap-2 mt-4">
-                <Label className="text-red-400">Selecione o contato para editar ou apagar: {isLoading ? <ReloadIcon className="animate-spin text-slate-400" /> : null}</Label>
+                <h1 className="text-xs text-red-400">Selecione o contato para editar: {isLoading ? <ReloadIcon className="animate-spin text-slate-400" /> : null}</h1>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -122,7 +152,7 @@ export default function EditForm() {
             </div>
             <div className="mt-4">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+                    <form onSubmit={form.handleSubmit(onEdit)} className="space-y-8 w-full">
                         <div className="flex gap-4 items-center justify-center">
                             <FormField
                                 control={form.control}
@@ -248,7 +278,7 @@ export default function EditForm() {
                                 )}
                             />
                         </div>
-                        <div className="w-full">
+                        <div className="w-full flex gap-4">
                             <Button
                                 variant={"secondary"}
                                 className="w-full"

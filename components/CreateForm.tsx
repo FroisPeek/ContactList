@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useMutateCreateContato from "@/hooks/useMutateCreateContatos";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import InputMask from 'react-input-mask';
 import { z } from "zod";
@@ -32,6 +32,7 @@ export const formSchema = z.object({
 });
 
 export default function CreateForm() {
+    const { invalidateQueries } = useQueryClient();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -46,7 +47,7 @@ export default function CreateForm() {
 
     const { mutateAsync: createContato, isLoading, isPending, isSuccess } = useMutateCreateContato()
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         const newContato = {
             nome: values.nome,
             sobrenome: values.sobrenome,
@@ -55,17 +56,14 @@ export default function CreateForm() {
             numero: values.numero,
             link: values.link
         }
-        createContato(newContato)
-        if (isSuccess) {
-            form.reset()
-        }
+        await createContato(newContato)
+        form.reset()
+        invalidateQueries({
+            queryKey: ["getContatos"],
+            exact: true
+        })
     }
 
-    useEffect(() => {
-        if (isSuccess) {
-            window.location.reload();
-        }
-    }, [isSuccess]);
 
     return (
         <div className="bg-zinc-800 p-4 rounded w-full mt-8">

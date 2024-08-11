@@ -21,7 +21,7 @@ export default function SearchNavBar() {
                     <Search />
                 </Button>
             </div>
-            <div className="mt-4 p-2 gap-4">
+            <div className="mt-4 p-0 gap-4">
                 <ScrollArea className="h-[625px] w-full rounded-lg pr-4">
                     {isLoading ?
                         <div className="flex flex-col gap-2">
@@ -37,7 +37,7 @@ export default function SearchNavBar() {
                         </div>
                         :
                         contatos && contatos.map((contato: any, index: number) => (
-                            <CardContact contatos={contato} />
+                            <CardContact key={index} contatos={contato} codigo={contato.codigo} />
                         ))}
                 </ScrollArea>
 
