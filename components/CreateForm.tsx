@@ -32,7 +32,7 @@ export const formSchema = z.object({
 });
 
 export default function CreateForm() {
-    const { invalidateQueries } = useQueryClient();
+    const query = useQueryClient();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -58,7 +58,7 @@ export default function CreateForm() {
         }
         await createContato(newContato)
         form.reset()
-        invalidateQueries({
+        query.invalidateQueries({
             queryKey: ["getContatos"],
             exact: true
         })
