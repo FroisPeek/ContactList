@@ -16,12 +16,12 @@ interface iProps {
 }
 
 export default function CardContact({ codigo, contatos }: iProps) {
-    const { invalidateQueries } = useQueryClient();
+    const query = useQueryClient();
     const { mutateAsync } = useMutateDeleteContato()
 
     async function onDelete(codigo: number) {
         await mutateAsync(codigo)
-        invalidateQueries({
+        query.invalidateQueries({
             queryKey: ["getContatos"],
             exact: true
         })
