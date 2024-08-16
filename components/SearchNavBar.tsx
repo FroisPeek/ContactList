@@ -1,13 +1,19 @@
 import { Input } from "@/components/ui/input";
-import useQueryGetAllContatos from "@/hooks/useQueryGetAllContatos";
+import useQuerySearchContato from "@/hooks/useQuerySearchContato";
 import { Search } from 'lucide-react';
+import { useState } from "react";
 import CardContact from "./CardContact";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
 
 export default function SearchNavBar() {
-    const { data: contatos, error, isLoading } = useQueryGetAllContatos();
+    const [searchTerm, setSearchTerm] = useState("");
+    const { data: searchResults, refetch, isLoading } = useQuerySearchContato(searchTerm);
+
+    const handleSearch = () => {
+        refetch();
+    };
 
     return (
         <div className="bg-zinc-900 w-96 h-full rounded p-4">
@@ -16,8 +22,10 @@ export default function SearchNavBar() {
                     type="text"
                     placeholder="Search..."
                     className="border-zinc-500 w-[200px]"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Button variant={"ghost"} onClick={() => alert('ihasbid')}>
+                <Button variant={"ghost"} onClick={handleSearch}>
                     <Search />
                 </Button>
             </div>
@@ -25,22 +33,16 @@ export default function SearchNavBar() {
                 <ScrollArea className="h-[625px] w-full rounded-lg pr-4">
                     {isLoading ?
                         <div className="flex flex-col gap-2">
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
-                            <Skeleton className="h-16 w-full bg-zinc-800 rounded" />
+                            {[...Array(10)].map((_, index) => (
+                                <Skeleton key={index} className="h-16 w-full bg-zinc-800 rounded" />
+                            ))}
                         </div>
                         :
-                        contatos && contatos.map((contato: any, index: number) => (
+                        searchResults ? searchResults.map((contato: any, index: number) => (
                             <CardContact key={index} contatos={contato} codigo={contato.codigo} />
-                        ))}
+                        )) : 'nada'
+                    }
                 </ScrollArea>
-
             </div>
         </div>
     );
