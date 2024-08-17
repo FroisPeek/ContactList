@@ -16,34 +16,35 @@ interface iProps {
 }
 
 export default function CardContact({ codigo, contatos }: iProps) {
-    const query = useQueryClient();
+    const query = useQueryClient()
+
     const { mutateAsync } = useMutateDeleteContato()
 
     async function onDelete(codigo: number) {
-        await mutateAsync(codigo)
+        await mutateAsync(codigo);
         query.invalidateQueries({
-            queryKey: ["getContatos"],
-            exact: true
+            queryKey: ["search"],
+            exact: false
         })
     }
 
     return (
-        <div>
-            <Card className="w-full h-16 text-white border-none bg-zinc-900 flex items-center pl-2 pr-2 gap-4 mb-2 shadow-lg transition-colors duration-100 delay-100 hover:bg-zinc-700">
+        <div className="w-full">
+            <Card className="w-full h-16 text-white border-none bg-zinc-800 flex items-center pl-2 pr-2 mb-2 shadow-lg transition-colors duration-100 delay-100 hover:bg-zinc-700 cursor-pointer">
                 <Avatar>
                     <AvatarImage src={`${contatos.link}.png`} alt={`${contatos.nome} ${contatos.sobrenome}`} />
                     <AvatarFallback>FT</AvatarFallback>
                 </Avatar>
-                <div className="text-xs gap-2 w-full">
+                <div className="text-xs gap-2 w-full ml-4">
                     <h3>{contatos.nome} {contatos.sobrenome}</h3>
                     <a
-                        className="text-sky-50 underline hover:text-sky-300 cursor-pointer"
+                        className="text-white underline hover:text-sky-300 cursor-pointer"
                         href={contatos.link}
                     >{contatos.link}
                     </a>
                 </div>
                 <div onClick={() => onDelete(codigo)}>
-                    <Trash className="w-4 h-4 stroke-red-500 hover:cursor-pointer transition-colors duration-100 delay-100 hover:stroke-red-400" />
+                    <Trash className="mr-4 w-4 h-4 stroke-red-500 hover:cursor-pointer transition-colors duration-100 delay-100 hover:stroke-red-400" />
                 </div>
             </Card>
         </div>

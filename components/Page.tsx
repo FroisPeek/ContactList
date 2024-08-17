@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import {
     Tabs,
     TabsContent,
@@ -10,7 +12,6 @@ import EditForm from "./EditForm"
 import PrincipalPage from "./PrincipalPage"
 
 export default function Page() {
-    //@ts-nocheck
     const [tab, setTab] = useState<"Principal" | "Adicionar" | "Editar">("Principal")
 
     return (

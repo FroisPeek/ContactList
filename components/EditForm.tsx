@@ -92,15 +92,12 @@ export default function EditForm() {
         });
 
         form.reset()
-        query.invalidateQueries({
-            queryKey: ["getContatos"],
-            exact: true
-        })
+        query.invalidateQueries(["search"], { exact: false });
     }
 
 
     return (
-        <div className="bg-zinc-800 p-4 rounded w-full mt-8">
+        <div className="bg-zinc-800 p-4 rounded w-full mt-8 h-[620px]">
             <h2 className="font-bold text-3xl">
                 Edite um contato da lista:
             </h2>

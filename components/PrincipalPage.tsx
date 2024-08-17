@@ -1,9 +1,12 @@
+import { useRouter } from "next/navigation";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
 
 export default function PrincipalPage() {
+    const router = useRouter()
+
     return (
-        <div className="px-4 sm:px-8">
+        <div className="px-4 sm:px-8 h-[644px]">
             <ScrollArea className="h-[625px] w-full rounded-lg pr-4">
 
                 <div className="flex items-center justify-center">
@@ -25,9 +28,23 @@ export default function PrincipalPage() {
                         <div className="space-y-1">
                             <p
                                 className="w-full text-sm font-medium leading-none transition duration-150 hover:text-sky-400 cursor-pointer underline"
-                                onClick={() => console.log('leony.dev')}
+                                onClick={() => router.push('https://github.com/FroisPeek')}
                             >
                                 https://github.com/FroisPeek
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        className="w-64 grid grid-cols-[25px_1fr] items-start"
+                    >
+                        <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                        <div className="space-y-1">
+                            <p
+                                className="w-full text-sm font-medium leading-none transition duration-150 hover:text-sky-400 cursor-pointer underline"
+                                onClick={() => router.push('https://linkedin.com/in/efroisdrumond')}
+                            >
+                                https://linkedin.com/in/efroisdrumond
+
                             </p>
                         </div>
                     </div>
@@ -44,7 +61,8 @@ export default function PrincipalPage() {
                     </h1>
                     <h1>
                         Neste projeto, utilizei Next.js, TypeScript, ASP.NET 8, EF 8 e
-                        desenvolvi meu próprio banco de dados SQL Server.
+                        desenvolvi meu próprio banco de dados SQL Server. Também usei libs como react hook form, zod,
+                        shadcn, lucide e tailwind.
                     </h1>
                 </div>
             </ScrollArea>

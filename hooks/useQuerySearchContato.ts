@@ -25,6 +25,5 @@ export default function useQuerySearchContato(nome: string) {
     return useQuery({
         queryKey: ["search", nome],
         queryFn: () => searchContato(nome),
-        enabled: !!nome,
     });
 }

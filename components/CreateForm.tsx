@@ -54,19 +54,17 @@ export default function CreateForm() {
             email: values.email,
             cpf: values.cpf,
             numero: values.numero,
-            link: values.link
-        }
-        await createContato(newContato)
-        form.reset()
-        query.invalidateQueries({
-            queryKey: ["getContatos"],
-            exact: true
-        })
+            link: values.link,
+        };
+        await createContato(newContato);
+        form.reset();
+        query.invalidateQueries(["search"], { exact: false });
     }
 
 
+
     return (
-        <div className="bg-zinc-800 p-4 rounded w-full mt-8">
+        <div className="bg-zinc-800 p-4 rounded w-full mt-8 h-[620px]">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <h2 className="font-bold text-3xl">
